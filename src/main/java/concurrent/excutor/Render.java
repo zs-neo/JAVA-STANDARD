@@ -1,7 +1,9 @@
 package concurrent.excutor;
 
+import concurrent.excutor.entity.Ad;
 import concurrent.excutor.entity.ImageData;
 import concurrent.excutor.entity.ImageInfo;
+import concurrent.excutor.entity.Page;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,5 +60,30 @@ public class Render {
     }
   }
   
-  void render
+  private static final long TIME_BUDGET = 10;
+  private static final Ad DEFAULT_AD = new Ad();
+  
+  Page renderPageWithAd() throws InterruptedException {
+    long endNanos = System.nanoTime() + TIME_BUDGET;
+    Callable<Ad> task = new Callable<Ad>() {
+      public Ad call() throws Exception {
+        Ad result = new Ad();
+        return result;
+      }
+    };
+    Future<Ad> future = executorService.submit(task);
+    Ad ad;
+    try {
+      long timeLeft = endNanos - System.nanoTime();
+      ad = future.get(timeLeft, TimeUnit.NANOSECONDS);
+    } catch (ExecutionException e) {
+      ad = DEFAULT_AD;
+    } catch (TimeoutException e) {
+      ad = DEFAULT_AD;
+      future.cancel(true);
+    }
+    Page page = new Page();
+    page.setAd(ad);
+    return page;
+  }
 }
