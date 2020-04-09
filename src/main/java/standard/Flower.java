@@ -11,7 +11,6 @@ public class Flower {
     System.out.println(
       "Constructor w/ int arg only, petalCount= "
         + petalCount);
-    Deque
   }
   
   Flower(String ss) {
