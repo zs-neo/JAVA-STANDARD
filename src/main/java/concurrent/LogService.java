@@ -1,7 +1,5 @@
 package concurrent;
 
-import org.omg.CORBA.TIMEOUT;
-
 import java.io.PrintWriter;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
