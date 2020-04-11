@@ -28,4 +28,41 @@ public class Standard {
  * 存在于父类和子类之间。
  * 方法被定义为final不能被重写。
  *
+ * 线程可能因为一些原因被阻塞或暂停：
+ *    - 等待IO
+ *    - 等待获取一个锁
+ *    - 等待从sleep中唤醒
+ *    - 等待另一个线程的结果
+ *
+ * 当线程被阻塞的时候经常被设置成线程阻塞的某个状态
+ *    - BLOCKED
+ *    - WAITING
+ *    - TIMED_WAITING
+ *
+ * 中断处理方案
+ *    - 传递InterruptedException
+ *    - 恢复中断
+ *    class taskRunnable implemmts Runnable{
+ *        BlockingQueue<Task> queue;
+ *        public void run(){
+ *            try{
+ *                processTask(queue.take());
+ *            }catch(InterruptedException e){
+ *                //恢复中断状态
+ *                Thread.currentThread().interrupt();
+ *            }
+ *        }
+ *    }
+ *
+ * Synchronized依据本身的状态调节线程的控制流。
+ *    - 封装状态，这些状态决定着线程执行到某一点时是通过还是等待
+ *    - 提供操作的方法以及高效地等待Synchronized进入到期望状态的方法
+ *
+ * Synchronizer
+ *    - latch闭锁是一种Synchronizer，它可以延迟线程的进度到达终止
+ *    - CountDownLatch是一个灵活的闭锁实现，计数已经完成的任务
+ *    - FutureTask描述了一个抽象的可携带结果的计算
+ *    - Counting semaphore 线程从许可集中获取可用许可，如果没有了就不给许可，等待
+ *    - barrier 所有线程必须同时到达关卡才能被解除
+ *
  */
