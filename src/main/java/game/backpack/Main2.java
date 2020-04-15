@@ -1,22 +1,14 @@
-package game;
+package game.backpack;
 
 import java.io.*;
 import java.util.*;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
-public class Main {
+public class Main2 {
   
   private final static int minL = 3;
   private final static int maxL = 7;
-  private static int vertex = 0;
-  private final static int process = 3;
-  private final static int timeOut = 1000;
+  private final static int vertex = 30000;
   private static List<List<Integer>> result = new ArrayList<>();
-  private static ThreadPoolExecutor executor = new ThreadPoolExecutor(3, 3, 0L,
-    TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(3));
   
   static class Edge {
     int to;
@@ -76,19 +68,6 @@ public class Main {
     }
   }
   
-  public static void jobs(int left, int right, Graph graph) {
-    boolean[] visit = new boolean[vertex];
-    for (int i = left; i < right; i++) {
-      List<Integer> path = new ArrayList<>();
-      visit[i] = true;
-      path.add(i);
-      dfs(i, path, visit, graph);
-      visit[i] = false;
-      path.remove(path.size() - 1);
-    }
-    System.out.println("doing "+left+" "+right+" over");
-  }
-  
   public static void convertIndexToId(Graph graph) {
     int temp;
     for (int i = 0; i < result.size(); i++) {
@@ -100,17 +79,14 @@ public class Main {
   }
   
   public static void main(String[] args) {
-    String filePath = "C:/test_data.txt";
-    File file = new File(filePath);
-    vertex = ((int)file.length()/73557)*6000;
     Graph graph = new Graph();
+    String filePath = "C:/test_data.txt";
     long startTime = System.currentTimeMillis();
     long start = startTime;
-    System.out.println(vertex);
-    
+
 //    loadData3(new File(filePath), graph);
     try {
-      FileInputStream fileInputStream = new FileInputStream(file);
+      FileInputStream fileInputStream = new FileInputStream(new File(filePath));
       // 把每次读取的内容写入到内存中，然后从内存中获取
       ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
       byte[] buffer = new byte[1024];
@@ -171,39 +147,14 @@ public class Main {
     System.out.println("程序读取文件时间：" + (endTime - startTime) + "ms");
     startTime = endTime;
     
-    int partNumber = graph.getSize() / process;
-    int lastNumber = graph.getSize() % process;
-    int jobNumber = 0;
-    if (lastNumber == 0) {
-      jobNumber = process;
-    } else {
-      jobNumber = process + 1;
-    }
-    System.out.println(jobNumber);
-    CountDownLatch countDownLatch = new CountDownLatch(jobNumber);
-    for (int i = 0; i < graph.getSize(); i += partNumber) {
-      final int startIndex = i;
-      if(i+partNumber>=graph.getSize()){
-        final int endIndex = i;
-        executor.submit(new Runnable() {
-          @Override
-          public void run() {
-            jobs(endIndex, graph.getSize(), graph);
-          }
-        });
-      }else{
-        executor.submit(new Runnable() {
-          @Override
-          public void run() {
-            jobs(startIndex, startIndex + partNumber, graph);
-          }
-        });
-      }
-    }
-    try {
-      countDownLatch.await(timeOut, TimeUnit.MILLISECONDS);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
+    boolean[] mark = new boolean[vertex];
+    for (int i = 0; i < graph.getSize(); i++) {
+      List<Integer> path = new ArrayList<>();
+      mark[i] = true;
+      path.add(i);
+      dfs(i, path, mark, graph);
+      mark[i] = false;
+      path.remove(path.size() - 1);
     }
     endTime = System.currentTimeMillis();
     System.out.println("递归求解时间：" + (endTime - startTime) + "ms");
@@ -229,8 +180,8 @@ public class Main {
     System.out.println("排序时间：" + (endTime - startTime) + "ms");
     startTime = endTime;
     try {
-      File outFile = new File("C:/result.txt");
-      BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFile)));
+      File file = new File("C:/result.txt");
+      BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
       int i = 0;
       String row = "";
       writer.write(result.size() + "\r\n");

@@ -1,74 +1,72 @@
 package solution;
 
-import standard.entity.TreeNode;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
-  public String dfs(TreeNode root, String s) {
-    if (root == null) {
-      s += "null,";
-      return s;
-    }
-    s += root.val+",";
-    s = dfs(root.left, s);
-    s = dfs(root.right, s);
-    return s;
-  }
-  
-  // Encodes a tree to a single string.
-  public String serialize(TreeNode root) {
-    return dfs(root, "");
-  }
-  
-  public TreeNode rDfs(TreeNode root, List<String> nums) {
-    if (nums.size() == 0) {
-      return root;
-    }
-    if (root == null) {
-      return root;
-    }
-    String s = nums.get(0);
-    nums.remove(0);
-    if (s == "null") return null;
-    TreeNode r = new TreeNode(Integer.parseInt(s));
-    r.left = rDfs(root.left, nums);
-    r.right = rDfs(root.left, nums);
-    return r;
-  }
-  
-  // Decodes your encoded data to tree.
-  public TreeNode deserialize(String data) {
-    String[] s = data.split(",");
-    if (s.length == 0) {
-      return null;
-    }
-    List nums = new ArrayList();
-    for (int i = 1; i < s.length; i++) {
-      nums.add(s[i]);
-    }
-    return rDfs(new TreeNode(Integer.parseInt(s[0])), nums);
-  }
   
   /**
-   *     1
-   *    / \
-   *   2   3
-   *      / \
-   *     4   5
+   * read
+   * read[  addr=0x17 , mask=0xff , val=0x7],
+   * read_his[  addr=0xff,mask=0xff,val=0x1],
+   * read[  addr=0xf0,mask=0xff,val=0x80]
+   *
    * @param args
    */
   public static void main(String[] args) {
-    TreeNode a = new TreeNode(1);
-    TreeNode b = new TreeNode(2);
-    TreeNode c = new TreeNode(3);
-    TreeNode d = new TreeNode(4);
-    TreeNode e = new TreeNode(5);
-    a.left = b;a.right = c;
-    c.left = d;c.right = e;
-    Main main = new Main();
-    System.out.println(main.serialize(a));
+    Scanner in = new Scanner(System.in);
+    String target = in.next();
+    String str = in.next();
+    boolean get = false;
+    String[] registers = str.split(",");
+    List<Integer> res = new ArrayList<Integer>();
+    for (int i = 0; i < registers.length; i += 3) {
+      String[] temp = registers[i].split("=");
+      int k;
+      for (k = 0; k < temp[0].length(); k++) {
+        if (temp[0].charAt(k) == '[') {
+          break;
+        }
+      }
+      String name = temp[0].substring(0, k);
+      if (name.equals(target)) {
+        res.add(i);
+      }
+    }
+    if (res.size() == 0) {
+      System.out.println("FAIL");
+    } else {
+      for (int i = 0; i < res.size(); i++) {
+        String s1 = registers[res.get(i)];
+        String s2 = registers[res.get(i) + 1];
+        String s3 = registers[res.get(i) + 2];
+        String[] part1 = s1.split("=");
+        int k;
+        for (k = part1[0].length() - 1; k >= 0; k--) {
+          if (part1[0].charAt(k) == '[') {
+            break;
+          }
+        }
+        String title1 = part1[0].substring(k + 1, part1[0].length());
+        String[] part2 = s2.split("=");
+        String[] part3 = s3.split("=");
+//        System.out.println(title1+" "+part2[0]+" "+part3[0]);
+        if (title1.equals("addr") && part2[0].equals("mask") && part3[0].equals("val")) {
+          String a = part1[1];
+          String b = part2[1];
+          String c = part3[1].substring(0, part3[1].length() - 1);
+          if ((a.substring(0,2).equals("0X")||a.substring(0,2).equals("0x"))&&
+            (b.substring(0,2).equals("0X")||b.substring(0,2).equals("0x"))&&
+            (c.substring(0,2).equals("0X")||c.substring(0,2).equals("0x"))){
+            get = true;
+            System.out.println(a + " " + b + " " + c);
+          }
+        }
+      }
+      if (!get) {
+        System.out.println("FAIL");
+      }
+    }
   }
-  
 }

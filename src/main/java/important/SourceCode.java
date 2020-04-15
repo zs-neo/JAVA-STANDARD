@@ -16,9 +16,18 @@ public class SourceCode {
   private ReentrantLock reentrantLock;
   private ReadWriteLock readWriteLock;
   private AbstractQueuedSynchronizer abstractQueuedSynchronizer;
-  private synchronized void lock(){}
+  
+  private synchronized void lock() {
+  }
   
   public static void main(String[] args) {
+    
+    /**
+     * System.arraycopy方法大量使用，这是个native方法，复制数组。
+     * Arrays.copyOf也是一个复制数组的java方法。
+     * ensureCapacity确保容量。
+     * int newCapacity = oldCapacity + (oldCapacity >> 1);
+     */
     List list = new ArrayList();
     List list1 = new LinkedList();
     List list2 = new CopyOnWriteArrayList();
