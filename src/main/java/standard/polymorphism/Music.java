@@ -1,4 +1,4 @@
-package standard.Polymorphism;
+package standard.polymorphism;
 
 public class Music {
   

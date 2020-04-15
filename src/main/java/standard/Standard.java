@@ -14,6 +14,16 @@ public class Standard {
 		return data;
 	}
 	
+	public static void inc(int i){
+	  i++;
+  }
+  
+  public static void main(String[] args) {
+    int i = 0;
+    inc(i);inc(i);
+    System.out.println(i);
+  }
+	
 }
 /**
  * overload（重载）
@@ -64,5 +74,14 @@ public class Standard {
  *    - FutureTask描述了一个抽象的可携带结果的计算
  *    - Counting semaphore 线程从许可集中获取可用许可，如果没有了就不给许可，等待
  *    - barrier 所有线程必须同时到达关卡才能被解除
+ *
+ * SpeedUp <= 1/(F+(1-F)/N)),其中F是必须串行化执行的比重，在一个N处理器的机器中。
+ *
+ * 单个任务的处理时间不仅包括任务的处理时间，也包括从队列中取出任务的时间。
+ *
+ * little定律的结论是"稳定的系统中顾客的平均数量等于他们的平均到达率乘以他们在系统中平均的停留时间"
+ *
+ * readWriteLock
+ *
  *
  */

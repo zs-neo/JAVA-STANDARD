@@ -1,6 +1,6 @@
 package standard;
 
-import standard.Polymorphism.*;
+import standard.polymorphism.*;
 
 public class Hero extends ActionCharacter implements CanFight, CanFlyHigher, CanSwim {
   
