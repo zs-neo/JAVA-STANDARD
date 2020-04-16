@@ -10,7 +10,7 @@ public class Main1 {
   
   private final static int minL = 3;
   private final static int maxL = 7;
-  private final static int vertex = 30000;
+  private final static int vertex = 612000;
   private static List<List<Integer>> result = new ArrayList<>();
   
   static class Edge {
