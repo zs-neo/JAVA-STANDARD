@@ -15,11 +15,12 @@ public class Main {
   private static int vertex = 0;
   private final static int process = 20;
   private final static int timeOut = 20000;
-  private final static String filePath = "C:/";
+  private final static String filePath = "";
   private static int[] topo;
   private static List<List<Integer>> result = new ArrayList<>();
   private static ThreadPoolExecutor executor = new ThreadPoolExecutor(process + 1, process + 1, 0L,
     TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(process + 1));
+  private static ReentrantLock lock = new ReentrantLock();
   
   static class Edge {
     int to;
@@ -43,7 +44,7 @@ public class Main {
       for (int i = 0; i < vertex; i++) {
         this.edgeFrom.add(new ArrayList<>());
       }
-      System.out.println("init ok");
+//      System.out.println("init ok");
     }
     
     public int getSize() {
@@ -51,7 +52,6 @@ public class Main {
     }
   }
   
-  private static ReentrantLock lock = new ReentrantLock();
   
   static void dfs(int cur, List<Integer> path, boolean[] mark, Graph graph) {
     for (Edge e : graph.edgeFrom.get(cur)) {
@@ -89,7 +89,7 @@ public class Main {
       visit[i] = false;
       path.remove(path.size() - 1);
     }
-    System.out.println("- doing job " + left + " " + (right - 1) + " over");
+//    System.out.println("- doing job " + left + " " + (right - 1) + " over");
   }
   
   public static void convertIndexToId(Graph graph) {
@@ -122,7 +122,7 @@ public class Main {
   }
   
   public static void main(String[] args) {
-    File file = new File(filePath + "test_data.txt");
+    File file = new File("/data/test_data.txt");
     vertex = ((int) file.length() / 73557) * 6000;
     topo = new int[vertex];
     Graph graph = new Graph();
@@ -189,8 +189,8 @@ public class Main {
     }
     topo(graph);
     long endTime = System.currentTimeMillis();
-    System.out.println("程序读取文件时间：" + (endTime - startTime) + "ms");
-    startTime = endTime;
+//    System.out.println("程序读取文件时间：" + (endTime - startTime) + "ms");
+//    startTime = endTime;
     
     int partNumber = graph.getSize() / process;
     int lastNumber = graph.getSize() % process;
@@ -228,10 +228,10 @@ public class Main {
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
-    System.out.println("result " + result.size());
-    endTime = System.currentTimeMillis();
-    System.out.println("递归求解时间：" + (endTime - startTime) + "ms");
-    startTime = endTime;
+//    System.out.println("result " + result.size());
+//    endTime = System.currentTimeMillis();
+//    System.out.println("递归求解时间：" + (endTime - startTime) + "ms");
+//    startTime = endTime;
     
     convertIndexToId(graph);
     result.sort(new Comparator<List<Integer>>() {
@@ -249,12 +249,12 @@ public class Main {
         return 0;
       }
     });
-    endTime = System.currentTimeMillis();
-    System.out.println("排序时间：" + (endTime - startTime) + "ms");
-    startTime = endTime;
+//    endTime = System.currentTimeMillis();
+//    System.out.println("排序时间：" + (endTime - startTime) + "ms");
+//    startTime = endTime;
     
     try {
-      File outFile = new File(filePath + "result1.txt");
+      File outFile = new File("/projects/student/result.txt");
       BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFile)));
       int i = 0;
       String row = "";
@@ -275,9 +275,9 @@ public class Main {
     } catch (IOException e) {
       e.printStackTrace();
     }
-    endTime = System.currentTimeMillis();
-    System.out.println("输出文件时间：" + (endTime - startTime) + "ms");
-    System.out.println("---------------");
+//    endTime = System.currentTimeMillis();
+//    System.out.println("输出文件时间：" + (endTime - startTime) + "ms");
+//    System.out.println("---------------");
     System.out.println("总时间：" + (endTime - start) + "ms");
     System.exit(1);
   }
