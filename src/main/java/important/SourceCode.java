@@ -1,10 +1,7 @@
 package important;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentSkipListMap;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.*;
 import java.util.concurrent.locks.AbstractQueuedSynchronizer;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -16,6 +13,7 @@ public class SourceCode {
   private volatile int lock;
   private Lock lock1;
   private ReentrantLock reentrantLock;
+  private Semaphore semaphore;
   private ReadWriteLock readWriteLock;
   private AbstractQueuedSynchronizer abstractQueuedSynchronizer;
   
@@ -47,6 +45,13 @@ public class SourceCode {
     Queue queue = new ArrayDeque();
     Deque deque = new ArrayDeque();
     Queue queue1 = new LinkedBlockingQueue();
+  
+    /**
+     * 底层是Object数组，继承了抽象队列和阻塞队列
+     * 是一个简单的数组形式队列，注意condition这个类
+     * 使用了ReentrantLock,condition做同步,主要逻辑是lock->unlock,await(队列满或通知阻塞的消费者)->signal
+     */
+    ArrayBlockingQueue queue2 = new ArrayBlockingQueue(10);
     
     /**
      * 第一种:开放定址法
@@ -108,7 +113,7 @@ public class SourceCode {
      *      Self->_hashStateW = v ;
      *      value = v ;
      *
-     * 异常处理->越界条件判断
+     * p = tab[i = (n - 1) & hash]
      */
     Map map = new HashMap(10);
     Map map1 = new LinkedHashMap();
@@ -122,10 +127,6 @@ public class SourceCode {
     HashSet hashSet = new HashSet();
     HashSet hashSet1 = new LinkedHashSet();
     
-    Integer a = new Integer(10);
-    Integer b = a;
-    b = 11;
-    System.out.println(a);
   }
   
 }

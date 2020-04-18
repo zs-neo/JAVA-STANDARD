@@ -1,62 +1,63 @@
 package solution;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Main {
   
-  public boolean canPartitionKSubsets(int[] nums, int k) {
-    sort(nums, 0, nums.length - 1);
-    int sum = 0;
-    for (int i = 0; i < nums.length; i++) {
-      sum += nums[i];
+  static class Edge {
+    private int to;
+    
+    public Edge(int to) {
+      this.to = to;
     }
-    if (sum % k > 0) return false;
-    int partSum = sum / k;
-    int[] ans = new int[k];
-    if (nums[nums.length - 1] > partSum) return false;
-    return search(nums, nums.length - 1, partSum, ans);
   }
   
-  public boolean search(int[] nums, int cur, int target, int[] ans) {
-    if (cur < 0) return true;
-    int num = nums[cur--];
-    for (int i = 0; i < ans.length; i++) {
-      if (ans[i] + num <= target) {
-        ans[i] += num;
-        if (search(nums, cur, target, ans)) {
-          return true;
+  private static List<List<Edge>> edgesFrom;
+  
+  public List<Integer> findMinHeightTrees(int n, int[][] edges) {
+    edgesFrom = new ArrayList<>(n + 1);
+    for (int i = 0; i < n; i++) edgesFrom.add(new ArrayList<>());
+    int[] indegree = new int[n + 1];
+    for (int[] a : edges) {
+      edgesFrom.get(a[0]).add(new Edge(a[1]));
+      edgesFrom.get(a[1]).add(new Edge(a[0]));
+    }
+    int[] queue = new int[10000];
+    int start = 0, end = 0;
+    int[] dist = new int[n + 1];
+    int[] visit = new int[n + 1];
+    //遍历每一个点，找到树高
+    for (int i = 0; i < n; i++) {
+      for (int j : dist) j = 0;
+      for (int j : visit) j = 0;
+      start = 0;
+      end = 0;
+      queue[end++] = i;
+      dist[i] = 1;
+      visit[i] = 1;
+      while (start < end) {
+        int top = queue[start++];
+        System.out.print(top+"-");
+        for (Edge edge : edgesFrom.get(top)) {
+          System.out.print(edge.to+" ");
+          if(visit[edge.to]==1)continue;
+          dist[edge.to] = dist[top] + 1;
+          visit[edge.to] = 1;
+          queue[end++] = edge.to;
         }
-        ans[i] -= num;
       }
+      System.out.println();
+      for (int j : dist) System.out.print(j + " ");
+      System.out.println();
     }
-    return false;
-  }
-  
-  public void sort(int[] nums, int left, int right) {
-    if (left > right) return;
-    int i, j, temp, t;
-    i = left;
-    j = right;
-    temp = nums[left];
-    while (i < j) {
-      while (i < j && nums[j] >= temp) j--;
-      while (i < j && nums[i] <= temp) i++;
-      if (i < j) {
-        t = nums[i];
-        nums[i] = nums[j];
-        nums[j] = t;
-      }
-    }
-    nums[left] = nums[i];
-    nums[i] = temp;
-    sort(nums, left, i - 1);
-    sort(nums, i + 1, right);
+    return null;
   }
   
   
   public static void main(String[] args) {
     Main main = new Main();
-    int[] a = {4, 3, 2, 3, 5, 2, 1};
-    int[] b = {2, 2, 2, 2, 3, 4, 5};
-    System.out.println(main.canPartitionKSubsets(a, 4));
-    System.out.println(main.canPartitionKSubsets(b, 4));
+    int[][] a = {{1, 0}, {1, 2}, {1, 3}};
+    main.findMinHeightTrees(4, a);
   }
 }
