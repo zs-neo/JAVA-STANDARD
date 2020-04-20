@@ -1,63 +1,48 @@
 package solution;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Main {
   
-  static class Edge {
-    private int to;
-    
-    public Edge(int to) {
-      this.to = to;
+  public static void swap(int[] a, int i, int j) {
+    System.out.println();
+    int temp = a[i];
+    a[i] = a[j];
+    a[j] = temp;
+  }
+  
+  public static void sort(int[] arr) {
+    //1.构建大顶堆
+    for (int i = arr.length / 2 - 1; i >= 0; i--) {
+      adjustHeap(arr, i, arr.length);
+    }
+    //2.调整堆结构+交换堆顶元素与末尾元素
+    for (int j = arr.length - 1; j > 0; j--) {
+      swap(arr, 0, j);//将堆顶元素与末尾元素进行交换
+      adjustHeap(arr, 0, j);//重新对堆进行调整
     }
   }
   
-  private static List<List<Edge>> edgesFrom;
-  
-  public List<Integer> findMinHeightTrees(int n, int[][] edges) {
-    edgesFrom = new ArrayList<>(n + 1);
-    for (int i = 0; i < n; i++) edgesFrom.add(new ArrayList<>());
-    int[] indegree = new int[n + 1];
-    for (int[] a : edges) {
-      edgesFrom.get(a[0]).add(new Edge(a[1]));
-      edgesFrom.get(a[1]).add(new Edge(a[0]));
-    }
-    int[] queue = new int[10000];
-    int start = 0, end = 0;
-    int[] dist = new int[n + 1];
-    int[] visit = new int[n + 1];
-    //遍历每一个点，找到树高
-    for (int i = 0; i < n; i++) {
-      for (int j : dist) j = 0;
-      for (int j : visit) j = 0;
-      start = 0;
-      end = 0;
-      queue[end++] = i;
-      dist[i] = 1;
-      visit[i] = 1;
-      while (start < end) {
-        int top = queue[start++];
-        System.out.print(top+"-");
-        for (Edge edge : edgesFrom.get(top)) {
-          System.out.print(edge.to+" ");
-          if(visit[edge.to]==1)continue;
-          dist[edge.to] = dist[top] + 1;
-          visit[edge.to] = 1;
-          queue[end++] = edge.to;
-        }
+  public static void adjustHeap(int[] arr, int i, int length) {
+    int temp = arr[i];//先取出当前元素i
+    for (int k = i * 2 + 1; k < length; k = k * 2 + 1) {//从i结点的左子结点开始，也就是2i+1处开始
+      if (k + 1 < length && arr[k] < arr[k + 1]) {//如果左子结点小于右子结点，k指向右子结点
+        k++;
       }
-      System.out.println();
-      for (int j : dist) System.out.print(j + " ");
-      System.out.println();
+      if (arr[k] > temp) {//如果子节点大于父节点，将子节点值赋给父节点（不用进行交换）
+        arr[i] = arr[k];
+        i = k;
+      } else {
+        break;
+      }
     }
-    return null;
+    arr[i] = temp;//将temp值放到最终的位置
   }
-  
   
   public static void main(String[] args) {
     Main main = new Main();
-    int[][] a = {{1, 0}, {1, 2}, {1, 3}};
-    main.findMinHeightTrees(4, a);
+    int[] a = {1, 5, 2, 4, 3, 10, 100, -10};
+    sort(a);
+    for (int i : a) System.out.print(i+" ");
   }
+  
+  
 }

@@ -2,17 +2,35 @@ package important;
 
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.locks.AbstractQueuedSynchronizer;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.*;
 
 public class SourceCode {
   
   private transient int i;
   private volatile int lock;
+  
+  /**
+   * lock接口
+   * lock 获取锁
+   * unlock 释放锁
+   * lockInterruptibly 除非当前线程被中断，否则获取锁
+   */
   private Lock lock1;
+  
+  /**
+   * ReetrantLock底层用AQS做的同步
+   * NonfairSync和FairSync
+   *
+   *
+   */
   private ReentrantLock reentrantLock;
+  private Condition condition;
+  
+  /**
+   * 双向链表Node(prev,next,nextWaiter,Thread)
+   * head<->node<->tail
+   */
+  private AbstractQueuedSynchronizer syn;
   private Semaphore semaphore;
   private ReadWriteLock readWriteLock;
   private AbstractQueuedSynchronizer abstractQueuedSynchronizer;
@@ -44,8 +62,13 @@ public class SourceCode {
     
     Queue queue = new ArrayDeque();
     Deque deque = new ArrayDeque();
+    
+    /**
+     * 使用了ReentrantLock,condition做同步
+     * 底层是链表，单向链表(head->node-last)
+     */
     Queue queue1 = new LinkedBlockingQueue();
-  
+    
     /**
      * 底层是Object数组，继承了抽象队列和阻塞队列
      * 是一个简单的数组形式队列，注意condition这个类
