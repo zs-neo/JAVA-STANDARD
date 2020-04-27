@@ -1,0 +1,20 @@
+package netty.chap2.io;
+
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
+public class TimeServerHanlerExecutePool {
+	
+	private ExecutorService executor;
+	
+	public TimeServerHanlerExecutePool(int maxPoolSize, int queueSize) {
+		this.executor = new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors(),
+				maxPoolSize, 120L, TimeUnit.SECONDS, new ArrayBlockingQueue<>(queueSize));
+	}
+	
+	public void execute(Runnable task) {
+		executor.execute(task);
+	}
+}

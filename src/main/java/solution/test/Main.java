@@ -5,103 +5,67 @@ package solution.test;
 import java.util.*;
 
 public class Main {
-  
-  static class Edge {
-    public int to;
-    public int cost;
-    
-    public Edge(int to, int cost) {
-      this.to = to;
-      this.cost = cost;
-    }
-  }
-  
-  static List<List<Edge>> edges = new ArrayList<>();
-  static int testCaseNumber;
-  static int size = 10000;
-  
-  public static boolean checkR() {
-    boolean[] visit = new boolean[testCaseNumber + 2];
-    Queue<Integer> queue = new ArrayDeque<Integer>();
-    queue.add(1);
-    while (!queue.isEmpty()) {
-      int now = queue.poll();
-      visit[now] = true;
-      for (Edge edge : edges.get(now)) {
-        if (!visit[edge.to]) {
-          queue.add(edge.to);
-        } else {
-          return false;
-        }
-      }
-    }
-    return true;
-  }
-  
-  public static int dij(int i) {
-    boolean[] visit = new boolean[size];
-    int pos;
-    int[] dist = new int[size];
-    for (int k = 0; k < dist.length; k++) {
-      dist[k] = 0;
-      visit[k] = false;
-    }
-    dist[i] = 0;
-    visit[i] = true;
-    pos = i;
-    for (int k = 0; k < testCaseNumber; k++) {
-      int max = -1;
-      int maxIndex = -1;
-      for(Edge edge : edges.get(pos)){
-        if(!visit[edge.to]){
-          if(max < dist[pos] + edge.cost){
-            max = dist[pos] + edge.cost;
-            maxIndex = edge.to;
-          }
-        }
-      }
-      if(maxIndex == -1){
-        break;
-      }
-      for (Edge edge : edges.get(pos)) {
-        if (!visit[edge.to]) {
-          if (dist[edge.to] < dist[pos] + dist[edge.to]) {
-            dist[edge.to] = dist[pos] + dist[edge.to];
-          }
-        }
-      }
-    }
-    return dist[i];
-  }
-  
-  public static void main(String[] args) {
-    Scanner in = new Scanner(System.in);
-    testCaseNumber = in.nextInt();
-    int[] rowNumber = new int[size];
-    for(int i=0;i<size;i++){
-      edges.add(new ArrayList<>());
-    }
-    for (int i = 0; i < testCaseNumber; i++) {
-      rowNumber[i] = in.nextInt();
-    }
-    int from, to, cost;
-    for (int i = 0; i < testCaseNumber; i++) {
-      from = in.nextInt();
-      cost = in.nextInt();
-      for (int j = 0; j < rowNumber[i]; j++) {
-        to = in.nextInt();
-        edges.get(from - 1).add(new Edge(to - 1, cost));
-      }
-    }
-    if (!checkR()) {
-      System.out.println("R");
-    } else {
-      int max = -1;
-      for(int i=0;i<testCaseNumber;i++){
-        int temp = dij(i);
-        if(temp > max)max = temp;
-      }
-      System.out.println(max);
-    }
-  }
+	
+	static int[] rowa = new int[100];
+	static int[] rowb = new int[100];
+	
+	
+	public static boolean check(int[] row, int a, int b) {
+		for (int i = a + 1; i <= b; i++) {
+			if (row[i] < row[i - 1]) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * 3
+	 * 1 3 2
+	 * 3 2 1
+	 *
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int n = sc.nextInt();
+		int in;
+		for (int i = 0; i < n; i++) {
+			in = sc.nextInt();
+			rowa[i] = in;
+		}
+		for (int i = 0; i < n; i++) {
+			in = sc.nextInt();
+			rowb[i] = in;
+		}
+		int[] dp = new int[100];
+		dp[0] = 0;
+		dp[1] = 0;
+		if (rowa[0] <= rowa[1]) {
+			dp[2] = 0;
+		} else if (rowb[0] >= rowb[1]) {
+			dp[2] = 1;
+		} else {
+			dp[2] = -1;
+		}
+		int[] temp = rowa;
+		for (int i = 2; i < n; i++) {
+			if (check(rowa, 0, i)) {
+				dp[i] = dp[i - 1];
+			} else {
+				temp = rowa;
+				temp[i - 1] = rowb[i];
+				temp[i] = rowb[i - 1];
+				if (check(temp, 0, i)) {
+					if (dp[i] != 0) {
+						dp[i] = Math.min(dp[i], dp[i - 1] + 1);
+					}
+				} else {
+					dp[i] = -1;
+				}
+			}
+		}
+		System.out.println(dp[n - 1]);
+	}
+	
 }

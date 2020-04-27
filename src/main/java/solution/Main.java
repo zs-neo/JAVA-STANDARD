@@ -1,48 +1,42 @@
 package solution;
 
+// 本题为考试单行多行输入输出规范示例，无需提交，不计分。
+
+import java.text.Format;
+import java.util.LinkedList;
+import java.util.Scanner;
+import java.util.Stack;
+
 public class Main {
-  
-  public static void swap(int[] a, int i, int j) {
-    System.out.println();
-    int temp = a[i];
-    a[i] = a[j];
-    a[j] = temp;
-  }
-  
-  public static void sort(int[] arr) {
-    //1.构建大顶堆
-    for (int i = arr.length / 2 - 1; i >= 0; i--) {
-      adjustHeap(arr, i, arr.length);
-    }
-    //2.调整堆结构+交换堆顶元素与末尾元素
-    for (int j = arr.length - 1; j > 0; j--) {
-      swap(arr, 0, j);//将堆顶元素与末尾元素进行交换
-      adjustHeap(arr, 0, j);//重新对堆进行调整
-    }
-  }
-  
-  public static void adjustHeap(int[] arr, int i, int length) {
-    int temp = arr[i];//先取出当前元素i
-    for (int k = i * 2 + 1; k < length; k = k * 2 + 1) {//从i结点的左子结点开始，也就是2i+1处开始
-      if (k + 1 < length && arr[k] < arr[k + 1]) {//如果左子结点小于右子结点，k指向右子结点
-        k++;
-      }
-      if (arr[k] > temp) {//如果子节点大于父节点，将子节点值赋给父节点（不用进行交换）
-        arr[i] = arr[k];
-        i = k;
-      } else {
-        break;
-      }
-    }
-    arr[i] = temp;//将temp值放到最终的位置
-  }
-  
-  public static void main(String[] args) {
-    Main main = new Main();
-    int[] a = {1, 5, 2, 4, 3, 10, 100, -10};
-    sort(a);
-    for (int i : a) System.out.print(i+" ");
-  }
-  
-  
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int n = sc.nextInt();
+		double[][] a = new double[100000][2];
+		double[][] b = new double[100000][2];
+		int x, y;
+		double res = 100000000,t=0;
+		for (int i = 0; i < n; i++) {
+			int opt = sc.nextInt();
+			for (int k = 0; k < opt; k++) {
+				a[k][0] = sc.nextInt();
+				a[k][1] = sc.nextInt();
+			}
+			for (int k = opt; k < 2 * opt; k++) {
+				x = sc.nextInt();
+				y = sc.nextInt();
+				for (int j = 0; j < opt; j++) {
+					t = (a[j][0]-x)*(a[j][0]-x) + (a[j][1]-y)*(a[j][1]-y);
+					if(t<res){
+						res = Math.sqrt(t);
+					}
+				}
+			}
+			String ans = res+"";
+			if(ans.length()<5){
+				ans+="000000";
+			}
+			System.out.println(Double.parseDouble(ans.substring(0,5)));
+		}
+		
+	}
 }
