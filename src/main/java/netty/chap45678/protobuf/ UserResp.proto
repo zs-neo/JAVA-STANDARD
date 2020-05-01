@@ -1,0 +1,23 @@
+package netty;
+option java_package = "netty.chap45678.protobuf";
+option java_outer_classname = "UserResp";
+
+message SubscribeResp{
+
+  required int32 subResqID = 1;
+  required int32 resqCode = 2;
+  required string desc = 3;
+
+}
+
+
+
+protoc.exe --java_out=.\ UserResp.proto
+
+
+
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>2.6.1</version>
+        </dependency>
