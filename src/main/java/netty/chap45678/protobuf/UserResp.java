@@ -9,7 +9,7 @@ public final class UserResp {
       com.google.protobuf.ExtensionRegistry registry) {
   }
   public interface SubscribeRespOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:netty.SubscribeResp)
+      // @@protoc_insertion_point(interface_extends:protostack.SubscribeResp)
       com.google.protobuf.MessageOrBuilder {
 
     /**
@@ -45,11 +45,11 @@ public final class UserResp {
         getDescBytes();
   }
   /**
-   * Protobuf type {@code netty.SubscribeResp}
+   * Protobuf type {@code protostack.SubscribeResp}
    */
   public static final class SubscribeResp extends
       com.google.protobuf.GeneratedMessage implements
-      // @@protoc_insertion_point(message_implements:netty.SubscribeResp)
+      // @@protoc_insertion_point(message_implements:protostack.SubscribeResp)
       SubscribeRespOrBuilder {
     // Use SubscribeResp.newBuilder() to construct.
     private SubscribeResp(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
@@ -363,11 +363,11 @@ public final class UserResp {
       return builder;
     }
     /**
-     * Protobuf type {@code netty.SubscribeResp}
+     * Protobuf type {@code protostack.SubscribeResp}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:netty.SubscribeResp)
+        // @@protoc_insertion_point(builder_implements:protostack.SubscribeResp)
         SubscribeRespOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
@@ -381,7 +381,7 @@ public final class UserResp {
                 SubscribeResp.class, Builder.class);
       }
 
-      // Construct using netty.chap45678.protobuf.UserResp.SubscribeResp.newBuilder()
+      // Construct using protostack.chap45678.protobuf.UserResp.SubscribeResp.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -653,7 +653,7 @@ public final class UserResp {
         return this;
       }
 
-      // @@protoc_insertion_point(builder_scope:netty.SubscribeResp)
+      // @@protoc_insertion_point(builder_scope:protostack.SubscribeResp)
     }
 
     static {
@@ -661,7 +661,7 @@ public final class UserResp {
       defaultInstance.initFields();
     }
 
-    // @@protoc_insertion_point(class_scope:netty.SubscribeResp)
+    // @@protoc_insertion_point(class_scope:protostack.SubscribeResp)
   }
 
   private static final com.google.protobuf.Descriptors.Descriptor

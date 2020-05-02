@@ -14,7 +14,7 @@ import io.netty.handler.stream.ChunkedWriteHandler;
 
 public class HttpFileServer {
 	
-	private static final String DEFAULT_URL = "/src/com/phei/netty/";
+	private static final String DEFAULT_URL = "/src/com/phei/protostack/";
 	
 	public void run(final int port, final String url) throws Exception {
 		EventLoopGroup bossGroup = new NioEventLoopGroup();

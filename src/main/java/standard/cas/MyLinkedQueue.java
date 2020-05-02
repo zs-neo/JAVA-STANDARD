@@ -19,7 +19,7 @@ public class MyLinkedQueue<E> {
     
     public Node(E item, Node<E> next) {
       this.item = item;
-      this.next = new AtomicReference<>(next);
+      this.next = new AtomicReference<Node<E>>(next);
     }
   }
   

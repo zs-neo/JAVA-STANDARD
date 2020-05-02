@@ -1,10 +1,16 @@
 package netty.chap12;
 
 import io.netty.bootstrap.Bootstrap;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.channel.socket.DatagramPacket;
+import io.netty.channel.socket.nio.NioDatagramChannel;
+import io.netty.util.CharsetUtil;
+
+import java.net.InetSocketAddress;
 
 public class ChineseProverbClient {
 	
@@ -12,17 +18,22 @@ public class ChineseProverbClient {
 		EventLoopGroup group = new NioEventLoopGroup();
 		try {
 			Bootstrap b = new Bootstrap();
-			b.group(group).channel(NioServerSocketChannel.class)
+			b.group(group).channel(NioDatagramChannel.class)
 					.option(ChannelOption.SO_BROADCAST, true)
 					.handler(new ChineseProverbClientHandler());
-			b.bind("10.0.2.2",port).sync().channel().closeFuture().await();
+			Channel ch = b.bind(0).sync().channel();
+			ch.writeAndFlush(new DatagramPacket(Unpooled.copiedBuffer("xxcxxzcz", CharsetUtil.UTF_8),
+					new InetSocketAddress("255.255.255.255", port))).sync();
+			if (!ch.closeFuture().await(15000)) {
+				System.out.println("查询超时!");
+			}
 		} finally {
 			group.shutdownGracefully();
 		}
 	}
 	
 	public static void main(String[] args) throws Exception {
-		new ChineseProverbClient().run(8080);
+		new ChineseProverbClient().run(8081);
 	}
 	
 }
