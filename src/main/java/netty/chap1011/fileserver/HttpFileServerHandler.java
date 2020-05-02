@@ -1,4 +1,4 @@
-package netty.chap10.fileserver;
+package netty.chap1011.fileserver;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;

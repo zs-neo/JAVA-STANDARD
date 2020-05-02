@@ -1,4 +1,4 @@
-package netty.chap10.websocket;
+package netty.chap1011.websocket;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;

@@ -1,4 +1,4 @@
-package netty.chap10.fileserver;
+package netty.chap1011.fileserver;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;

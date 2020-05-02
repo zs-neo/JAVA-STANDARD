@@ -1,4 +1,4 @@
-package netty.chap10.httpxml;
+package netty.chap1011.httpxml;
 
 public class Test {
 	

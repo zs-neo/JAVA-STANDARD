@@ -1,4 +1,4 @@
-package netty.chap10.websocket;
+package netty.chap1011.websocket;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -42,10 +42,16 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
 		ctx.flush();
 	}
 	
+	@Override
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+		cause.printStackTrace();
+		ctx.close();
+	}
+	
 	private void handleHttpRequest(ChannelHandlerContext ctx,
 								   FullHttpRequest req) throws Exception {
 		
-		// 如果HTTP解码失败，返回HHTP异常
+		// 如果HTTP解码失败，返回HTTP异常
 		if (!req.getDecoderResult().isSuccess()
 				|| (!"websocket".equals(req.headers().get("Upgrade")))) {
 			sendHttpResponse(ctx, req, new DefaultFullHttpResponse(HTTP_1_1,
@@ -58,8 +64,7 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
 				"ws://localhost:8080/websocket", null, false);
 		handshaker = wsFactory.newHandshaker(req);
 		if (handshaker == null) {
-			WebSocketServerHandshakerFactory
-					.sendUnsupportedWebSocketVersionResponse(ctx.channel());
+			WebSocketServerHandshakerFactory.sendUnsupportedWebSocketVersionResponse(ctx.channel());
 		} else {
 			handshaker.handshake(ctx.channel(), req);
 		}
@@ -114,9 +119,4 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
 		}
 	}
 	
-	@Override
-	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-		cause.printStackTrace();
-		ctx.close();
-	}
 }
